@@ -4,8 +4,8 @@ import re
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 
-
 ip_lookup = pyipinfodb.IPInfo('468931e75d245ed80170cca9dbfb7d3bbaa7982e1a06053e112da49795eaf47d')
+logFile = '/var/log/auth.log'
 
 
 def geoLocate(IPs):
@@ -28,7 +28,7 @@ def geoLocate(IPs):
     return coord_list
 
 
-def getIPs(filename='/var/log/auth.log'):
+def getIPs(filename=logFile):
     '''
     Parse IPs from /var/log/auth.log
     '''
@@ -49,10 +49,10 @@ def getIPs(filename='/var/log/auth.log'):
 
 
 def generateMap(coord_list):
-    """
-    Generate map with IP locations. 
+    '''
+    Generate map with IP locations.
     coord_list is a list of dictionaries with keys 'long' and 'lat'
-    """
+    '''
 
     ip_map = Basemap(projection='robin', lon_0=0, resolution='c')
 
