@@ -1,7 +1,6 @@
 # ip-location-map
 
-Here are some python scripts you can use to plot ip-addresses on a map
-
+Plot the location of failed login attempts made to a computer with an opened ssh port.
 
 ### Dependencies:
 
@@ -13,9 +12,11 @@ Here are some python scripts you can use to plot ip-addresses on a map
 
 * First, you need to get an API key for [ipinfodb](http://ipinfodb.com/), and insert it in **getlocation.py**.
 
-* Finally, run the **getlocation.py** script. It will create an image file called map.png.
+* Set the variables `logFile` with the path to the log file, which depends on your system---for most Linux systems is 'var/log/auth.log'. Set `failStr` with is the string that appears in the line of a failed login attempt before the IP address in the log file.
 
-### Map
+* Finally, run the **getlocation.py** script. It will fetch the IP addresses from the log file and find its geolocation. It will then plot it on a map.
+
+#### Map
 
 Resulting map
 

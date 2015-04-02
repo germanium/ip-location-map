@@ -55,16 +55,16 @@ def generateMap(coord_list):
     '''
 
     ip_map = Basemap(projection='robin', lon_0=0, resolution='c')
-    
+
     for line in coord_list:
         x, y = ip_map(float(line['long']), float(line['lat']))
         plt.plot(x,y, 'o', color='#ff0000', ms=2.7, markeredgewidth=0.5)
 
     ip_map.drawcountries(color='#ffffff')
     ip_map.fillcontinents(color='#cccccc', lake_color='#ffffff')
-    
-    plt.savefig('ip_map.png', dpi=600)
 
+#    plt.savefig('ip_map.png', dpi=600)
+    plt.show()
 
 if __name__ == '__main__':
     IPs = getIPs()
