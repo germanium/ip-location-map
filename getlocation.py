@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 ip_lookup = pyipinfodb.IPInfo('468931e75d245ed80170cca9dbfb7d3bbaa7982e1a06053e112da49795eaf47d')
 logFile = '/var/log/auth.log'
+failStr = 'Failed password'     # String in the log file indicating a failed login attempt
 
 
 def geoLocate(IPs):
@@ -28,11 +29,11 @@ def geoLocate(IPs):
     return coord_list
 
 
-def getIPs(filename=logFile):
+def getIPs(filename=logFile, matchStr=failStr):
     '''
-    Parse IPs from /var/log/auth.log
+    Parse IPs from log logfile
     '''
-    pattern = r'(\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b)'
+    pattern = r'(?<='+matchStr+r').*(\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b)'
     compile_obj = re.compile(pattern)
 
     file2read = open(filename, 'r')
@@ -40,7 +41,6 @@ def getIPs(filename=logFile):
     for currentline in file2read:
         match_obj = compile_obj.search(currentline)
         if match_obj:
-            # set addy to matched ip - change this to 2 if you use the pattern above to find Accepted password string
             IPs.append(match_obj.group(1))
 
     file2read.close()
@@ -55,14 +55,14 @@ def generateMap(coord_list):
     '''
 
     ip_map = Basemap(projection='robin', lon_0=0, resolution='c')
-
+    
     for line in coord_list:
         x, y = ip_map(float(line['long']), float(line['lat']))
         plt.plot(x,y, 'o', color='#ff0000', ms=2.7, markeredgewidth=0.5)
 
     ip_map.drawcountries(color='#ffffff')
     ip_map.fillcontinents(color='#cccccc', lake_color='#ffffff')
-
+    
     plt.savefig('ip_map.png', dpi=600)
 
 
