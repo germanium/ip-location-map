@@ -1,7 +1,6 @@
 # ip-location-map
 
-Here are some python scripts you can use to plot ip-addresses on a map
-
+Plot the location of failed login attempts made to a computer with an opened ssh port.
 
 ### Dependencies:
 
@@ -11,19 +10,14 @@ Here are some python scripts you can use to plot ip-addresses on a map
 
 ### Short usage guide:
 
-* First, you need to get an API key for [ipinfodb](http://ipinfodb.com/), and insert it in getlocation.py
+* First, you need to get an API key for [ipinfodb](http://ipinfodb.com/), and insert it in **getlocation.py**.
 
-* Put your IP-addresses in a file called **ips.txt**, with one IP on each line. (Note: only tested with IPv4)
+* Set the variables `logFile` with the path to the log file, which depends on your system---for most Linux systems is 'var/log/auth.log'. Set `failStr` with is the string that appears in the line of a failed login attempt before the IP address in the log file.
 
-* Run the **getlocation.py** script. It will create a file called **geo.txt**, which contains coordinates on each line.
+* Finally, run the **getlocation.py** script. It will fetch the IP addresses from the log file and find its geolocation. It will then plot it on a map.
 
-* Finally, run the **generatemap.py** script. It will create an image file called map.png.
+#### Map
 
-You can play around with the settings in **generatemap.py**, to use different map projections, different colors and so on.
+Resulting map
 
-
-I used this to plot refused SSH connections on my linux machine. I used the following command to fill ips.txt:
-
-    grep "refused" /var/log/auth.log | awk '{ print $9 }' | sort | uniq > ips.txt
-
-Note that i grep for lines with "refused". These are connections refused because of rules in /etc/hosts.deny and /etc/hosts.allow. You may need to change the command to suit your configuration.
+![Map](ip_map.png)
