@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-from pyipinfodb import pyipinfodb
 import re
-from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
+from pyipinfodb import pyipinfodb
+from mpl_toolkits.basemap import Basemap
+from KEY import API_KEY
 
-ip_lookup = pyipinfodb.IPInfo(<API_KEY>)
+
+ip_lookup = pyipinfodb.IPInfo(API_KEY)
 logFile = '/var/log/auth.log'
 failStr = 'Failed password'     # String in the log file indicating a failed login attempt
 
