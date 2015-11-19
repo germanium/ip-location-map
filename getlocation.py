@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import re
+import sys
+import time
 import matplotlib.pyplot as plt
 from pyipinfodb import pyipinfodb
 from mpl_toolkits.basemap import Basemap
@@ -7,7 +9,7 @@ from KEY import API_KEY
 
 
 ip_lookup = pyipinfodb.IPInfo(API_KEY)
-logFile = '/var/log/auth.log'
+logFile = '/var/log/auth.log'   # Default log file
 failStr = 'Failed password'     # String in the log file indicating a failed login attempt
 
 
@@ -28,6 +30,7 @@ def geoLocate(IPs):
         coord_list.append({'IP': ip,
                            'long': ip_data['longitude'],
                            'lat': ip_data['latitude']})
+        time.sleep(0.01)    # If it fetches too fast it gives error
     return coord_list
 
 
@@ -60,7 +63,7 @@ def generateMap(coord_list):
 
     for line in coord_list:
         x, y = ip_map(float(line['long']), float(line['lat']))
-        plt.plot(x,y, 'o', color='#ff0000', ms=2.7, markeredgewidth=0.5)
+        plt.plot(x, y, 'o', color='#ff0000', ms=2.7, markeredgewidth=0.5)
 
     ip_map.drawcountries(color='#ffffff')
     ip_map.fillcontinents(color='#cccccc', lake_color='#ffffff')
@@ -68,7 +71,13 @@ def generateMap(coord_list):
 #    plt.savefig('ip_map.png', dpi=600)
     plt.show()
 
+
 if __name__ == '__main__':
-    IPs = getIPs()
+    print("""Usage: First argument should be a log file.
+        By default it uses %s""" % logFile)
+    if len(sys.argv) == 2:          # Use input source
+        logFile = sys.argv[1]
+        print("Using %s" % logFile)
+    IPs = getIPs(filename=logFile)
     coord_list = geoLocate(IPs)
     generateMap(coord_list)
